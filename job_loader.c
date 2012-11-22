@@ -4,7 +4,7 @@
 
 #include "job_loader.h"
 
-void next_job(int current_time)
+Job next_job(int current_time)
 {
     int buffer_size = 60;
     char next_line[60];
@@ -19,6 +19,6 @@ void next_job(int current_time)
     start_time = atoi(strtok(NULL," "));
     cpu_time = atof(strtok(NULL," "));
     IO_count = atoi(strtok(NULL," "));
-    /*TODO:Create the job*/
-    printf("%s,%i,%f,%i\n",command_name,start_time,cpu_time,IO_count);
+    /*Create the job*/
+    return create_job(command_name,start_time,cpu_time,IO_count);
 }
