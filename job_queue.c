@@ -13,7 +13,15 @@ JobQueue create_JobQueue()
 
 void destory_JobQueue(JobQueue queue)
 {
-    /*This will need to be a deep destroy*/
+    JobNode temp_head;
+    while(queue->size != 0)
+    {
+        temp_head = queue->head->next;
+        free(queue->head);
+        queue->head = temp_head;
+        queue->size--;
+    }
+    free(queue);
 }
 
 void push_JobQueue(JobQueue jQueue, Job toAdd)
@@ -43,6 +51,7 @@ Job pop_JobQueue(JobQueue jQueue)
     JobNode temp_head;
     if(jQueue->size != 0)
     {
+        jQueue->size--;
         temp_head = jQueue->head;
         return_val = temp_head->job;
         jQueue->head = jQueue->head->next;
