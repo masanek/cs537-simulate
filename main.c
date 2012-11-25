@@ -43,7 +43,12 @@ int main()
         if(time_CPU <= time_IO && time_CPU <= time_Arrival)
         {
             /*Handle context switch*/
+            /*temp_job = CPU_finished(clock);*/
             /*Add to IO if needed*/
+            if(temp_job != NULL && temp_job->IOOperations>0)
+	    {
+                needs_IO(clock,temp_job);
+            }
         }
         if(time_IO <= time_Arrival && time_IO <= time_CPU)
         {
