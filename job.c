@@ -16,7 +16,7 @@ Job create_job(char * name, int start, double CPU_time, int IO_count)
     temp_job->time_remaining = temp_job->CPU_time;
     temp_job->time_running = 0;
     temp_job->IO_count = IO_count;
-    temp_job->IOOperations = trunc ((IO_count + 8191) / 8192);
+    temp_job->IOOperations = (int)trunc ((IO_count + 8191) / 8192);
     temp_job->IO_interval = trunc(temp_job->CPU_time/temp_job->IOOperations);
     return temp_job;
 }

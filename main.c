@@ -1,7 +1,9 @@
-#include "stdio.h"
-
+#include <stdio.h>
+#include <math.h>
+#include <limits.h>
 #include "job_loader.h"
 #include "IO_manager.h"
+
 
 int main()
 {
@@ -10,6 +12,8 @@ int main()
     int time_CPU;
     int time_IO;
     int time_Arrival;
+    int noMoreJobs = 1;
+    int min;
     /*Job for arrivals*/
     Job temp_job;
     /*Initialize Job Loader*/
@@ -21,18 +25,35 @@ int main()
     /*Enter the main loop*/
     while(running)
     {
-        /*time_CPU = next_FinishCPU(clock)*/
         time_CPU = timeTilCurrentCompletes();
-        time_IO = next_CompletesIO(clock);
-        time_Arrival = next_JobArrival(clock);
+        time_IO = next_CompletedIO(clock);
+        /*Must account for if we are at the end of the file*/
+        if(noMoreJobs == 0)
+        {
+            time_Arrival = next_JobArrival(clock);
+        }
+        if(time_Arrival == -1)
+        {
+            noMoreJobs = 1;
+            time_Arrival = INT_MAX;
+        }
+        /*increment clock the smallest needed*/
+        min = (time_IO < time_Arrival) ? time_IO : time_Arrival;
+        clock += (time_CPU < min) ? time_CPU : min;
         if(time_CPU <= time_IO && time_CPU <= time_Arrival)
         {
             /*Handle context switch*/
+            /*temp_job = CPU_finished(clock);*/
             /*Add to IO if needed*/
+            if(temp_job != NULL && temp_job->IOOperations>0)
+	    {
+                needs_IO(clock,temp_job);
+            }
         }
         if(time_IO <= time_Arrival && time_IO <= time_CPU)
         {
             /*Handle finishing IO*/
+            temp_job = IO_finished(clock);
         }
         if(time_Arrival <= time_IO && time_Arrival <= time_CPU)
         {
@@ -42,6 +63,7 @@ int main()
                 /*needs_CPU(temp_job)*/
             }while(temp_job != NULL);
         }
+        clock++;
     }
     return 0;
 }

@@ -2,6 +2,8 @@
 
 void IO_init();
 
-void needs_IO(Job);
+void needs_IO(int, Job);
 
-int next_CompletesIO(int);
+int next_CompletedIO(int);
+
+Job IO_finished(int);
