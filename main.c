@@ -16,6 +16,7 @@ int main()
     int min;
     /*Job for arrivals*/
     Job temp_job;
+    Job finished_job;
     /*Initialize Job Loader*/
     next_job(-1);
     /*Initialize IO_manager*/
