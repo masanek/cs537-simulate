@@ -1,15 +1,9 @@
 #include "job_queue.h"
 
-#ifndef cs537_IO_manager
-#define cs537_IO_manager
-typedef struct cs537_IO_manager /*Tag for the struct*/
-{ 
-    JobQueue waiting_jobs;
-    Job current_job;
-    int time_left;
-}*IO_manager;/*Actual struct name*/
-#endif
+static JobQueue waiting_jobs;
+static Job current_job;
+static int time_left;
 
-IO_manager init();
+void IO_init();
 
-void needs_IO(IO_manager, Job);
+void needs_IO(Job);

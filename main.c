@@ -1,36 +1,22 @@
 #include "stdio.h"
 
 #include "job_loader.h"
-#include "job.h"
-#include "job_queue.h"
+#include "IO_manager.h"
+
 int main()
 {
-    int clock;
-    Job test;
-    JobQueue test_queue = create_JobQueue();
-    /*Initialize all the Managers*/
-    /*Grab the first job?*/
+    int clock = 0;
+    int running = 1;
+    /*Initialize Job Loader*/
+    next_job(-1);
+    /*Initialize IO_manager*/
+    IO_init();
+    /*Initialize the Scheduler*/
+    /*Schedualer_Init()*/
     /*Enter the main loop*/
-    /*
     while(running)
     {
-        int simTime = simulator.timeTillSomething();
-        int IOtime = iomanager.timeTillfinish();
-        int jobArrival = jobLoader.timeTillNextIO;
         
     }
-    */
-    /*For testing*/
-    for(clock = 0; clock < 20; clock++)
-    {
-        test = next_job(clock);
-        push_JobQueue(test_queue, test);
-    }
-    for(clock = 0; clock < 20; clock++)
-    {
-        test = pop_JobQueue(test_queue);
-        printf("%s,%i,%f,%i\n",test->cmd_name,test->start_time,test->CPU_time,test->IO_count);
-    }
-
     return 0;
 }
