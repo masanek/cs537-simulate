@@ -22,7 +22,7 @@ int main()
     while(running)
     {
         /*time_CPU = next_FinishCPU(clock)*/
-        time_IO = next_CompletesIO(clock);
+        time_IO = next_CompletedIO(clock);
         time_Arrival = next_JobArrival(clock);
         if(time_CPU <= time_IO && time_CPU <= time_Arrival)
         {
@@ -41,6 +41,7 @@ int main()
                 /*needs_CPU(temp_job)*/
             }while(temp_job != NULL);
         }
+        clock++;
     }
     return 0;
 }
