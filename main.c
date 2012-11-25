@@ -17,11 +17,12 @@ int main()
     /*Initialize IO_manager*/
     IO_init();
     /*Initialize the Scheduler*/
-    /*Schedualer_Init()*/
+    schedule_init();
     /*Enter the main loop*/
     while(running)
     {
         /*time_CPU = next_FinishCPU(clock)*/
+        time_CPU = timeTilCurrentCompletes();
         time_IO = next_CompletesIO(clock);
         time_Arrival = next_JobArrival(clock);
         if(time_CPU <= time_IO && time_CPU <= time_Arrival)

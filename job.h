@@ -4,6 +4,7 @@
 typedef struct cs537_Job /*Tag for the struct*/
 { 
     char* cmd_name;
+    int arrival_time;
     int start_time;
     int CPU_time;
     int time_remaining;
