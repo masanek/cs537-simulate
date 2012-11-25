@@ -11,6 +11,16 @@ int main()
     /*Initialize all the Managers*/
     /*Grab the first job?*/
     /*Enter the main loop*/
+    /*
+    while(running)
+    {
+        int simTime = simulator.timeTillSomething();
+        int IOtime = iomanager.timeTillfinish();
+        int jobArrival = jobLoader.timeTillNextIO;
+        
+    }
+    */
+    /*For testing*/
     for(clock = 0; clock < 20; clock++)
     {
         test = next_job(clock);
@@ -21,5 +31,6 @@ int main()
         test = pop_JobQueue(test_queue);
         printf("%s,%i,%f,%i\n",test->cmd_name,test->start_time,test->CPU_time,test->IO_count);
     }
+
     return 0;
 }

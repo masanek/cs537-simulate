@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "job_queue.h"
+
 JobQueue create_JobQueue()
 {
     /*Malloc the memory*/
@@ -58,4 +59,16 @@ Job pop_JobQueue(JobQueue jQueue)
         free(temp_head);
     }
     return return_val;
+}
+
+int isEmpty_JobQueue(JobQueue jQueue)
+{
+    if(jQueue->size == 0)
+    {
+         return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }

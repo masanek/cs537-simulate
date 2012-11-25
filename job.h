@@ -7,6 +7,8 @@ typedef struct cs537_Job /*Tag for the struct*/
     int start_time;
     float CPU_time;
     int IO_count;
+    double IOOperations;
+    int IO_interval;
 }*Job;/*Actual struct name*/
 #endif
 
