@@ -1,19 +1,16 @@
 #include <stdlib.h>
-
 #include "IO_manager.h"
 
-IO_manager init()
+void IO_init()
 {
-    IO_manager temp_manager = malloc(sizeof(IO_manager));
-    temp_manager->waiting_jobs = create_JobQueue();
-    temp_manager->current_job = NULL;
-    temp_manager->time_left = 0;
-    return temp_manager;
+    waiting_jobs = create_JobQueue();
+    current_job = NULL;
+    time_left = 0;
 }
 
-void needs_IO(IO_manager manager, Job toAdd)
+void needs_IO(Job toAdd)
 {
-    push_JobQueue(manager->waiting_jobs, toAdd);
+    push_JobQueue(waiting_jobs, toAdd);
 }
 
 
