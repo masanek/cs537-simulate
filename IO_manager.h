@@ -2,7 +2,7 @@
 
 void IO_init();
 
-void needs_IO(Job);
+void needs_IO(int, Job);
 
 int next_CompletedIO(int);
 

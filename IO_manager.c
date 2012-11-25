@@ -14,9 +14,17 @@ void IO_init()
     time_started = -1;
 }
 
-void needs_IO(Job toAdd)
+void needs_IO(int current_time, Job toAdd)
 {
-    push_JobQueue(waiting_jobs, toAdd);
+    if(isEmpty_JobQueue(waiting_jobs))
+    {
+        current_job = toAdd;
+        time_started = current_time;
+    }
+    else
+    {
+        push_JobQueue(waiting_jobs, toAdd);
+    }
 }
 
 int next_CompletedIO(int current_time)
