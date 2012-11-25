@@ -22,11 +22,11 @@ int main()
     /*Initialize IO_manager*/
     IO_init();
     /*Initialize the Scheduler*/
-    /*Schedualer_Init()*/
+    schedule_init();
     /*Enter the main loop*/
     while(running)
     {
-        /*time_CPU = next_FinishCPU(clock)*/
+        time_CPU = timeTilCurrentCompletes(clock);
         time_IO = next_CompletedIO(clock);
         /*Must account for if we are at the end of the file*/
         if(noMoreJobs == 0)
