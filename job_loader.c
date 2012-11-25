@@ -4,6 +4,9 @@
 
 #include "job_loader.h"
 
+/*Holder for next job*/
+static Job waiting_job = NULL;
+
 Job next_job(int current_time)
 {
     /*Return value and variables to creat job*/
@@ -37,7 +40,7 @@ Job next_job(int current_time)
 }
 
 /*Check when the next job arrives*/
-int time_till_next(int current_time)
+int next_JobArrival(int current_time)
 {
     /*=Null only if didnt call next_job first or EOF*/
     if(waiting_job != NULL)
