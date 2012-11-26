@@ -17,7 +17,7 @@ void IO_init()
 
 void needs_IO(int current_time, JobP toAdd)
 {
-    if(isEmpty_JobQueue(waiting_jobs))
+    if(current_job == NULL)
     {
         current_job = toAdd;
         time_started = current_time;
