@@ -2,11 +2,15 @@
 #include <limits.h>
 
 #include "schedule.h"
+/*current job receiving CPU*/
 static JobP current_job;
+/*FIFO queue*/
 static JobQueueP readyQueue;
-static int start_time; /* start time of current job*/
-/*statix int time_slice Time slice of current Job*/
+/*Time that it started CPU*/
+static int start_time;
+/*Switch in or out costs 1 ms*/
 #define CONTEXT_SWITCH 1
+
 void schedule_init(){
     readyQueue = create_JobQueue();  
     current_job = NULL;
@@ -18,7 +22,8 @@ void needs_CPU(int current_time, JobP toAdd)
     if(start_time == -1)/*Nothing is there*/
     {
         current_job = toAdd;
-        start_time = current_time+CONTEXT_SWITCH;/*Not sure if this is right*/
+        /*It cana start only after 1ms of being switched in*/
+        start_time = current_time+CONTEXT_SWITCH;
     }
     else
     {
@@ -33,35 +38,18 @@ int next_CPU(int current_time){
     }
     else
     {
-        /*Since we are only doing FIFO otherwise below*/
+        /*Since we are only doing FIFO- run until you need IO and include the swtich 1ms*/
         return start_time + current_job->IO_interval + CONTEXT_SWITCH - current_time;
-        /*
-            int min = current_job->timeTillNextIO<timeSlice ? current_job->timeTillNextIO : timeSlice
-        */
     }
-  
-
-  /* for now 
-  timeTilNextSlice = current_job->time_remaining;        
-
-   doesn't matter if they're the same, since we'll check in main if the
-      current job needs to do IO, just need to get a number for when current
-      job ends 
-  if (timeTilNextIO > timeTilNextSlice) {
-    returnVal = timeTilNextSlice;
-  } else {
-    returnVal = timeTilNextIO;
-  } 
-  
-  return returnVal; */
 }
 
 JobP CPU_finished(int current_time){
     JobP returnVal = current_job;
+    /*update how much CPU is left*/
+    /*Since we dont release the JOB until endTime+1, the clock is one ahead of the switch out*/
+    current_job->time_remaining -= ((current_time-CONTEXT_SWITCH) - start_time);
   
-    current_job->time_remaining -= (current_time - start_time)-CONTEXT_SWITCH;
-  
-    /* if current_job needs I/O or has 0 time left, send to main, otherwise, add to readyqueue */ 
+    /* if current_job needs I/O or has 0 time left, send to main, otherwise, add to back readyqueue */ 
     if (current_job->time_remaining > 0 && current_job->IOOperations == 0) {
         push_JobQueue(readyQueue, current_job);
         returnVal=NULL;
@@ -73,6 +61,7 @@ JobP CPU_finished(int current_time){
     {
         start_time = current_time;
     }
+    /*Only one job is here*/
     if(current_job == returnVal)
     {
         returnVal=NULL;

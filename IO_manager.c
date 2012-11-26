@@ -3,9 +3,11 @@
 #include <limits.h>
 #include "IO_manager.h"
 
-
+/*The queue for jobs waiting for IO*/
 static JobQueueP waiting_jobs;
+/*Current job handling IO*/
 static JobP current_job;
+/*Clock time when entered IO*/
 static int time_started;
 
 void IO_init()
@@ -17,6 +19,7 @@ void IO_init()
 
 void needs_IO(int current_time, JobP toAdd)
 {
+    /*If there is nobody waiting*/
     if(current_job == NULL)
     {
         current_job = toAdd;
@@ -24,14 +27,17 @@ void needs_IO(int current_time, JobP toAdd)
     }
     else
     {
+        /*Add to waiting queue*/
         push_JobQueue(waiting_jobs, toAdd);
     }
 }
 
 int next_CompletedIO(int current_time)
 {
+    /*This is true is current_job == NULL*/
     if(time_started != -1)
     {
+        /*IO always takes 10 seconds*/
         return 10-(current_time - time_started);
     }
     else
@@ -49,6 +55,7 @@ JobP IO_finished(int current_time)
     {
         /*Add back onto the queue*/
         push_JobQueue(waiting_jobs,current_job);
+        /*And return saying IO handled the switch*/
         return_val = NULL;
     } 
     /*Set up next job to run, if there is one*/
@@ -58,7 +65,7 @@ JobP IO_finished(int current_time)
     {
         time_started = current_time;
     }
-    /*We only have one in queue dont send it to CPU*/
+    /*If just one job with only IO left dont return anything*/
     if(current_job == return_val)
     {
         return_val = NULL;
