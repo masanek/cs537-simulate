@@ -4,6 +4,7 @@
 #include "job_loader.h"
 #include "IO_manager.h"
 #include "schedule.h"
+#include "stats.h"
 
 int main()
 {
@@ -23,6 +24,8 @@ int main()
     IO_init();
     /*Initialize the Scheduler*/
     schedule_init();
+    /*Initialize the STATs*/
+    init_stats();
     /*Enter the main loop*/
     printf("Start Simulation **\n\n");
     while(running==1)
@@ -63,6 +66,7 @@ int main()
             if(temp_job != NULL && temp_job->IOOperations==0)
 	    {
                 printf("%s finished\n",temp_job->cmd_name);
+                stats_Job(temp_job,clock);
             }
             temp_job = NULL;
         }
@@ -78,6 +82,7 @@ int main()
             if(temp_job != NULL && temp_job->time_remaining==0)
             {
                 printf("%s finished\n",temp_job->cmd_name);
+                stats_Job(temp_job,clock);
             }
             temp_job = NULL;
         }
@@ -104,5 +109,6 @@ int main()
         printf("*************************************\n");
         clock++;
     }
+    print_stats();
     return 0;
 }
