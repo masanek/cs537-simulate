@@ -3,20 +3,20 @@
 #include <limits.h>
 #include "job_loader.h"
 #include "IO_manager.h"
-
+#include "schedule.h"
 
 int main()
 {
     int clock = 0;
     int running = 1;
-    int time_CPU;
-    int time_IO;
-    int time_Arrival;
-    int noMoreJobs = 1;
+    int time_CPU=INT_MAX;
+    int time_IO=INT_MAX;
+    int time_Arrival = INT_MAX;
+    int noMoreJobs = 0;
     int min;
     /*Job for arrivals*/
-    Job temp_job;
-    Job finished_job;
+    JobP temp_job;
+    JobP finished_job;
     /*Initialize Job Loader*/
     next_job(-1);
     /*Initialize IO_manager*/
@@ -24,9 +24,10 @@ int main()
     /*Initialize the Scheduler*/
     schedule_init();
     /*Enter the main loop*/
+    printf("Start Simulation **\n\n");
     while(running)
     {
-        time_CPU = timeTilCurrentCompletes(clock);
+        time_CPU = next_CPU(clock);
         time_IO = next_CompletedIO(clock);
         /*Must account for if we are at the end of the file*/
         if(noMoreJobs == 0)
@@ -61,7 +62,8 @@ int main()
             /*Handle arriving Jobs*/
             do{
                 temp_job = next_job(clock);
-                /*needs_CPU(temp_job)*/
+                printf("Sent %s to CPU\n",temp_job->cmd_name);
+                needs_CPU(clock, temp_job);
             }while(temp_job != NULL);
         }
         clock++;

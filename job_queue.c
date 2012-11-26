@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include "job_queue.h"
 
-JobQueue create_JobQueue()
+JobQueueP create_JobQueue()
 {
     /*Malloc the memory*/
-    JobQueue temp_queue = malloc(sizeof(JobQueue));
+    JobQueueP temp_queue = (JobQueueP)malloc(sizeof(JobQueue));
     /*Not sure if these are necessary*/
     temp_queue->head = NULL;
     temp_queue->tail = NULL;
@@ -12,9 +12,9 @@ JobQueue create_JobQueue()
     return temp_queue;
 }
 
-void destory_JobQueue(JobQueue queue)
+void destory_JobQueue(JobQueueP queue)
 {
-    JobNode temp_head;
+    JobNodeP temp_head;
     while(queue->size != 0)
     {
         temp_head = queue->head->next;
@@ -25,10 +25,10 @@ void destory_JobQueue(JobQueue queue)
     free(queue);
 }
 
-void push_JobQueue(JobQueue jQueue, Job toAdd)
+void push_JobQueue(JobQueueP jQueue, JobP toAdd)
 {
     /*Create a new JobNode*/
-    JobNode temp_node = malloc(sizeof(JobNode));
+    JobNodeP temp_node = (JobNodeP)malloc(sizeof(struct JobNode));
     /*Set the job value*/
     temp_node->job = toAdd;
     temp_node->next = NULL;
@@ -46,10 +46,10 @@ void push_JobQueue(JobQueue jQueue, Job toAdd)
     jQueue->size++;
 }
 
-Job pop_JobQueue(JobQueue jQueue)
+JobP pop_JobQueue(JobQueueP jQueue)
 {
-    Job return_val = NULL;
-    JobNode temp_head;
+    JobP return_val = NULL;
+    JobNodeP temp_head;
     if(jQueue->size != 0)
     {
         jQueue->size--;
@@ -61,7 +61,7 @@ Job pop_JobQueue(JobQueue jQueue)
     return return_val;
 }
 
-int isEmpty_JobQueue(JobQueue jQueue)
+int isEmpty_JobQueue(JobQueueP jQueue)
 {
     if(jQueue->size == 0)
     {

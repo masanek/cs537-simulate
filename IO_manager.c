@@ -3,8 +3,8 @@
 #include "IO_manager.h"
 
 
-static JobQueue waiting_jobs;
-static Job current_job;
+static JobQueueP waiting_jobs;
+static JobP current_job;
 static int time_started;
 
 void IO_init()
@@ -14,7 +14,7 @@ void IO_init()
     time_started = -1;
 }
 
-void needs_IO(int current_time, Job toAdd)
+void needs_IO(int current_time, JobP toAdd)
 {
     if(isEmpty_JobQueue(waiting_jobs))
     {
@@ -39,9 +39,9 @@ int next_CompletedIO(int current_time)
     }
 }
 
-Job IO_finished(int current_time)
+JobP IO_finished(int current_time)
 {
-    Job return_val = current_job;
+    JobP return_val = current_job;
     current_job->IOOperations--;
     /*Check if we only have IO left*/
     if(current_job->time_remaining == 0)

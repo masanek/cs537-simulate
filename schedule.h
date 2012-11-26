@@ -1,12 +1,11 @@
 #include "job_queue.h"
 
-#ifndef cs537_IO_manager
-#define cs537_IO_manager
-typedef struct cs537_Scheduler /*Tag for the struct*/
-{ 
-    JobQueue waiting_jobs;
-    Job current_job;
-}*Scheduler;/*Actual struct name*/
-#endif
+void schedule_init();
 
-Scheduler init();
+void needs_CPU(int,JobP);
+
+int next_CPU(int);
+
+JobP CPU_finished(int);
+
+

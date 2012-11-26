@@ -5,28 +5,28 @@
 #define cs537_JobNode
 struct JobNode /*Tag for the struct*/
 { 
-    Job job;
+    JobP job;
     struct JobNode * next;
 };/*Actual struct name*/
-typedef struct JobNode* JobNode;
+typedef struct JobNode* JobNodeP;
 #endif
 /*Define our job queue, but not twice*/
 #ifndef cs537_JobQueue
 #define cs537_JobQueue
 typedef struct cs537_JobQueue /*Tag for the struct*/
 { 
-    JobNode head;
-    JobNode tail;
+    JobNodeP head;
+    JobNodeP tail;
     int size;
-}*JobQueue;/*Actual struct name*/
+}JobQueue,*JobQueueP;/*Actual struct name*/
 #endif
 
-JobQueue create_JobQueue();
+JobQueueP create_JobQueue();
 
-void destory_JobQueue(JobQueue);
+void destory_JobQueue(JobQueueP);
 
-void push_JobQueue(JobQueue, Job);
+void push_JobQueue(JobQueueP, JobP);
 
-Job pop_JobQueue(JobQueue);
+JobP pop_JobQueue(JobQueueP);
 
-int isEmpty_JobQueue(JobQueue);
+int isEmpty_JobQueue(JobQueueP);

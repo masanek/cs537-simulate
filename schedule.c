@@ -1,63 +1,79 @@
 #include <stdio.h>
+#include <limits.h>
 
-static Job current_job;
-static JobQueue readyQueue;
-static start_time; // get rid of job start time var
-
+#include "schedule.h"
+static JobP current_job;
+static JobQueueP readyQueue;
+static int start_time; /* start time of current job*/
+/*statix int time_slice Time slice of current Job*/
+#define CONTEXT_SWITCH 1
 void schedule_init(){
-  readyQueue = create_JobQueue();  
-  current_job = NULL;
+    readyQueue = create_JobQueue();  
+    current_job = NULL;
+    start_time = -1;
 }
 
-int timeTilCurrentCompletes(int current_time){
-  int timeTilNextIO;
-  int timeTilNextSlice;
-  int returnVal;
-  /* ends either at next I/O or timeslice end, whichever comes soonest */
-  /* no timeslices just when next I/O is */
-
-  timeTilNextIO = current_job->start_time + current_job->IO_interval - current_time + 1;
+void needs_CPU(int current_time, JobP toAdd)
+{
+    if(start_time == -1)/*Nothing is there*/
+    {
+        current_job = toAdd;
+        start_time = current_time+CONTEXT_SWITCH;/*Not sure if this is right*/
+    }
+    else
+    {
+        push_JobQueue(readyQueue, toAdd);
+    }
+}
+int next_CPU(int current_time){
+    if(start_time == -1)
+    {
+        return INT_MAX;
+    }
+    else
+    {
+        /*Since we are only doing FIFO otherwise below*/
+        return start_time + current_job->IO_interval + CONTEXT_SWITCH - current_time;
+        /*
+            int min = current_job->timeTillNextIO<timeSlice ? current_job->timeTillNextIO : timeSlice
+        */
+    }
   
 
-  /* for now */
+  /* for now 
   timeTilNextSlice = current_job->time_remaining;        
 
-  /* doesn't matter if they're the same, since we'll check in main if the
+   doesn't matter if they're the same, since we'll check in main if the
       current job needs to do IO, just need to get a number for when current
-      job ends */
+      job ends 
   if (timeTilNextIO > timeTilNextSlice) {
     returnVal = timeTilNextSlice;
   } else {
     returnVal = timeTilNextIO;
   } 
   
-  return returnVal; 
+  return returnVal; */
 }
 
-
-Job CPU_finished(int current_time){
-  Job returnVal = NULL;
+JobP CPU_finished(int current_time){
+    JobP returnVal = NULL;
   
-  current_job->time_remaining -= (current_time - current_job->start_time);
+    current_job->time_remaining -= (current_time - start_time);
   
-  /* if current_job needs I/O or has 0 time left, send to main, otherwise, add to readyqueue */ 
-  if (current_job->time_remaining == 0 || current_job->IOOperations > 0) {
-    returnVal = current_job;
-  } else {
-    push_JobQueue(readyQueue, current_job);
-  }
-  /* factor in context switch */
-  current_job = pop_JobQueue( 
-  start_time = current_time +1
+    /* if current_job needs I/O or has 0 time left, send to main, otherwise, add to readyqueue */ 
+    if (current_job->time_remaining == 0 || current_job->IOOperations > 0) {
+        returnVal = current_job;
+    }
+    else
+    {
+        push_JobQueue(readyQueue, current_job);
+    }
+    start_time = -1;
+    current_job = pop_JobQueue(readyQueue);
+    if(current_job != NULL)
+    {
+        start_time = current_time;
+    }
+    return returnVal;
 }
 
-
-void contextSwitch(int current_time){
-  /* update current job's variables */
-  /* get the next job from the queue */
-  /* put the current job on the queue */
-  current_job->time_remaining -= (current_time - current_job->start_time); 
-  addJob(current_job);
-  current_job = pop_JobQueue(readyQueue);
-  current_job->start_time = current_time;
-}
