@@ -25,9 +25,10 @@ int main()
     schedule_init();
     /*Enter the main loop*/
     printf("Start Simulation **\n\n");
-    while(running)
+    while(running==1)
     {
         time_CPU = next_CPU(clock);
+        printf("%i\n", time_CPU);
         time_IO = next_CompletedIO(clock);
         /*Must account for if we are at the end of the file*/
         if(noMoreJobs == 0)
@@ -42,6 +43,7 @@ int main()
         /*increment clock the smallest needed*/
         min = (time_IO < time_Arrival) ? time_IO : time_Arrival;
         clock += (time_CPU < min) ? time_CPU : min;
+        printf("IO:%i CPU:%i ARR:%i clock:%i\n",time_IO, time_CPU, time_Arrival, clock);
         if(time_CPU <= time_IO && time_CPU <= time_Arrival)
         {
             /*Handle context switch*/
@@ -62,8 +64,11 @@ int main()
             /*Handle arriving Jobs*/
             do{
                 temp_job = next_job(clock);
-                printf("Sent %s to CPU\n",temp_job->cmd_name);
-                needs_CPU(clock, temp_job);
+                if(temp_job!=NULL)
+                {
+                    printf("Sent %s to CPU\n",temp_job->cmd_name);
+                    needs_CPU(clock, temp_job);
+                }
             }while(temp_job != NULL);
         }
         clock++;

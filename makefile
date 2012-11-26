@@ -4,7 +4,7 @@ CFLAGS = -pedantic -Wall
 
 # ****************************************************
 sim: main.o job_queue.o job_loader.o job.o IO_manager.o schedule.o
-	$(CC) $(CFLAGS) main.o job_loader.o job_queue.o job.o schedule.o IO_manager.o -o sim -lpthread -lm
+	$(CC) $(CFLAGS) main.o job_loader.o job_queue.o job.o schedule.o IO_manager.o -o sim -lpthread -lm -g
 
 schedule.o: schedule.c 
 	$(CC) $(CFLAGS) -c schedule.c

@@ -25,6 +25,7 @@ void needs_CPU(int current_time, JobP toAdd)
         push_JobQueue(readyQueue, toAdd);
     }
 }
+
 int next_CPU(int current_time){
     if(start_time == -1)
     {
@@ -32,8 +33,10 @@ int next_CPU(int current_time){
     }
     else
     {
-        /*Since we are only doing FIFO otherwise below*/
-        return start_time + current_job->IO_interval + CONTEXT_SWITCH - current_time;
+        printf("%i\n",start_time);
+        return 10;
+        /*Since we are only doing FIFO otherwise below
+        return start_time + current_job->IO_interval + CONTEXT_SWITCH - current_time;*/
         /*
             int min = current_job->timeTillNextIO<timeSlice ? current_job->timeTillNextIO : timeSlice
         */
