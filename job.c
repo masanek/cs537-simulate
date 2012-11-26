@@ -14,18 +14,19 @@ JobP create_job(char * name, int start, double CPU_time, int IO_count)
     temp_job->cmd_name = strcpy(temp_job->cmd_name,name);
     temp_job->arrival_time = start;
     temp_job->CPU_time = (CPU_time*1000);
-    /*HELPER INFO*/
-    temp_job->time_remaining = (int)temp_job->CPU_time;
-    temp_job->time_running = 0;
     temp_job->IO_count = IO_count;
+    /*HELPER INFO*/
+    /*Time left thats needed on CPU*/
+    temp_job->time_remaining = (int)temp_job->CPU_time;
+    /*?*/
+    temp_job->time_running = 0;
+    /*Number of IO ops needed*/
     temp_job->IOOperations = trunc ((IO_count + 8191) / 8192);
+    /*Interval of IO rounded up-We should get rid of this and use tim's mod algo(?)*/
     temp_job->IO_interval = trunc(temp_job->CPU_time/temp_job->IOOperations)<1 ? 1 : trunc(temp_job->CPU_time/temp_job->IOOperations);
+    /*? not sure why*/
     temp_job->timeTillNextIO = temp_job->IO_interval;
+    /*Print what was loaded*/
     printf("LOADED JOB:%s,Arrival: %i, IOOperations: %f, interval:%f\n",temp_job->cmd_name,start, temp_job->IOOperations, temp_job->IO_interval);
     return temp_job;
-}
-
-void print_job(JobP j)
-{
-    
 }
