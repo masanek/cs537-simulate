@@ -27,6 +27,7 @@ int main()
     printf("Start Simulation **\n\n");
     while(running==1)
     {
+        printf("*************************************\n");
         time_CPU = next_CPU(clock);
         time_IO = next_CompletedIO(clock);
         /*Must account for if we are at the end of the file*/
@@ -46,8 +47,9 @@ int main()
         {
              break;
         }
-        /*printf("CLOCK: %lu\n",clock);
-        printf("IO:%i CPU:%i ARR:%i clock:%lu\n",time_IO, time_CPU, time_Arrival, clock);*/
+        /*printf("CLOCK: %lu\n",clock);*/
+        printf("IO:%i CPU:%i ARR:%i\n",time_IO, time_CPU, time_Arrival);
+        printf("Current clock:%lu\n\n",clock);
         if(time_CPU <= time_IO && time_CPU <= time_Arrival)
         {
             /*Handle context switch*/
@@ -57,6 +59,10 @@ int main()
 	    {
                 printf("Sent %s to IO\n",temp_job->cmd_name);
                 needs_IO(clock,temp_job);
+            }
+            if(temp_job != NULL && temp_job->IOOperations==0)
+	    {
+                printf("%s finished\n",temp_job->cmd_name);
             }
             temp_job = NULL;
         }
@@ -68,6 +74,10 @@ int main()
 	    {
                 printf("Sent %s from IO to CPU\n",temp_job->cmd_name);
                 needs_CPU(clock,temp_job);
+            }
+            if(temp_job != NULL && temp_job->time_remaining==0)
+            {
+                printf("%s finished\n",temp_job->cmd_name);
             }
             temp_job = NULL;
         }
@@ -85,6 +95,13 @@ int main()
             temp_job = NULL;
         }
         temp_job = NULL;
+        /*Print current queues*/
+        printf("\n");
+        print_IO_manager();
+        printf("\n");
+        print_schedule_manager();
+        printf("\n");
+        printf("*************************************\n");
         clock++;
     }
     return 0;

@@ -18,8 +18,13 @@ JobP create_job(char * name, int start, double CPU_time, int IO_count)
     temp_job->time_running = 0;
     temp_job->IO_count = IO_count;
     temp_job->IOOperations = trunc ((IO_count + 8191) / 8192);
-    temp_job->IO_interval = trunc(temp_job->CPU_time/temp_job->IOOperations);
+    temp_job->IO_interval = trunc(temp_job->CPU_time/temp_job->IOOperations)<1 ? 1 : trunc(temp_job->CPU_time/temp_job->IOOperations);
     temp_job->timeTillNextIO = temp_job->IO_interval;
     printf("LOADED JOB:%s,Arrival: %i, IOOperations: %f, interval:%f\n",temp_job->cmd_name,start, temp_job->IOOperations, temp_job->IO_interval);
     return temp_job;
+}
+
+void print_job(JobP j)
+{
+    
 }

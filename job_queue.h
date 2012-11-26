@@ -30,3 +30,5 @@ void push_JobQueue(JobQueueP, JobP);
 JobP pop_JobQueue(JobQueueP);
 
 int isEmpty_JobQueue(JobQueueP);
+
+void print_JobQueue(JobQueueP);

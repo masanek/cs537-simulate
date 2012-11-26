@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "job_queue.h"
 
 JobQueueP create_JobQueue()
@@ -71,4 +72,17 @@ int isEmpty_JobQueue(JobQueueP jQueue)
     {
         return 0;
     }
+}
+
+void print_JobQueue(JobQueueP jQueue)
+{
+    JobNodeP temp_head = jQueue->head;
+    int count = 0;
+    while(temp_head != NULL)
+    {
+        printf("%i:%s,",count, temp_head->job->cmd_name);
+        temp_head = temp_head->next;
+        count ++;
+    }
+    printf("\n");
 }

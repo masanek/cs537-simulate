@@ -16,3 +16,5 @@ typedef struct cs537_Job /*Tag for the struct*/
 #endif
 
 JobP create_job(char *, int, double, int);
+
+void print_job(JobP);

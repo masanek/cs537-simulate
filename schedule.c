@@ -59,7 +59,7 @@ int next_CPU(int current_time){
 JobP CPU_finished(int current_time){
     JobP returnVal = current_job;
   
-    current_job->time_remaining -= (current_time - start_time);
+    current_job->time_remaining -= (current_time - start_time)-CONTEXT_SWITCH;
   
     /* if current_job needs I/O or has 0 time left, send to main, otherwise, add to readyqueue */ 
     if (current_job->time_remaining > 0 && current_job->IOOperations == 0) {
@@ -80,3 +80,12 @@ JobP CPU_finished(int current_time){
     return returnVal;
 }
 
+void print_schedule_manager()
+{
+    printf("*Schedule*\n");
+    print_JobQueue(readyQueue);
+    if(current_job != NULL)
+    {
+       printf("current:%s IO:%f TimeLeft:%i\n",current_job->cmd_name, current_job->IOOperations, current_job->time_remaining);
+    }
+}

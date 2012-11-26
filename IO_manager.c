@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <limits.h>
 #include "IO_manager.h"
 
@@ -65,5 +66,14 @@ JobP IO_finished(int current_time)
     return return_val;
 }
 
+void print_IO_manager()
+{
+    printf("*IO*\n");
+    print_JobQueue(waiting_jobs);
+    if(current_job != NULL)
+    {
+       printf("current:%s IO:%f TimeLeft:%i\n",current_job->cmd_name, current_job->IOOperations, current_job->time_remaining);
+    }
+}
 
 
