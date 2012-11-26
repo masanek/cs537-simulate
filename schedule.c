@@ -57,23 +57,25 @@ int next_CPU(int current_time){
 }
 
 JobP CPU_finished(int current_time){
-    JobP returnVal = NULL;
+    JobP returnVal = current_job;
   
     current_job->time_remaining -= (current_time - start_time);
   
     /* if current_job needs I/O or has 0 time left, send to main, otherwise, add to readyqueue */ 
-    if (current_job->time_remaining == 0 || current_job->IOOperations > 0) {
-        returnVal = current_job;
-    }
-    else
-    {
+    if (current_job->time_remaining > 0 && current_job->IOOperations == 0) {
         push_JobQueue(readyQueue, current_job);
+        returnVal=NULL;
     }
+    /*Set up the next guy*/
     start_time = -1;
     current_job = pop_JobQueue(readyQueue);
     if(current_job != NULL)
     {
         start_time = current_time;
+    }
+    if(current_job == returnVal)
+    {
+        returnVal=NULL;
     }
     return returnVal;
 }

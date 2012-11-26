@@ -44,7 +44,7 @@ JobP IO_finished(int current_time)
     JobP return_val = current_job;
     current_job->IOOperations--;
     /*Check if we only have IO left*/
-    if(current_job->time_remaining == 0)
+    if(current_job->time_remaining == 0 && current_job->IOOperations >0)
     {
         /*Add back onto the queue*/
         push_JobQueue(waiting_jobs,current_job);
@@ -56,6 +56,11 @@ JobP IO_finished(int current_time)
     if(current_job != NULL)
     {
         time_started = current_time;
+    }
+    /*We only have one in queue dont send it to CPU*/
+    if(current_job == return_val)
+    {
+        return_val = NULL;
     }
     return return_val;
 }

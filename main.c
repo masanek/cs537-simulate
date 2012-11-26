@@ -7,7 +7,7 @@
 
 int main()
 {
-    int clock = 0;
+    long clock = 0;
     int running = 1;
     int time_CPU=INT_MAX;
     int time_IO=INT_MAX;
@@ -28,7 +28,6 @@ int main()
     while(running==1)
     {
         time_CPU = next_CPU(clock);
-        printf("%i\n", time_CPU);
         time_IO = next_CompletedIO(clock);
         /*Must account for if we are at the end of the file*/
         if(noMoreJobs == 0)
@@ -43,7 +42,12 @@ int main()
         /*increment clock the smallest needed*/
         min = (time_IO < time_Arrival) ? time_IO : time_Arrival;
         clock += (time_CPU < min) ? time_CPU : min;
-        /*printf("IO:%i CPU:%i ARR:%i clock:%i\n",time_IO, time_CPU, time_Arrival, clock);*/
+        if(time_IO == INT_MAX && time_CPU == INT_MAX && time_Arrival == INT_MAX)
+        {
+             break;
+        }
+        /*printf("CLOCK: %lu\n",clock);
+        printf("IO:%i CPU:%i ARR:%i clock:%lu\n",time_IO, time_CPU, time_Arrival, clock);*/
         if(time_CPU <= time_IO && time_CPU <= time_Arrival)
         {
             /*Handle context switch*/
@@ -54,11 +58,18 @@ int main()
                 printf("Sent %s to IO\n",temp_job->cmd_name);
                 needs_IO(clock,temp_job);
             }
+            temp_job = NULL;
         }
         if(time_IO <= time_Arrival && time_IO <= time_CPU)
         {
             /*Handle finishing IO*/
             temp_job = IO_finished(clock);
+            if(temp_job != NULL && temp_job->time_remaining>0)
+	    {
+                printf("Sent %s from IO to CPU\n",temp_job->cmd_name);
+                needs_CPU(clock,temp_job);
+            }
+            temp_job = NULL;
         }
         if(time_Arrival <= time_IO && time_Arrival <= time_CPU)
         {
@@ -71,7 +82,9 @@ int main()
                     needs_CPU(clock, temp_job);
                 }
             }while(temp_job != NULL);
+            temp_job = NULL;
         }
+        temp_job = NULL;
         clock++;
     }
     return 0;
