@@ -3,8 +3,11 @@ CC = gcc
 CFLAGS = -pedantic -Wall
 
 # ****************************************************
-sim: main.o job_queue.o job_loader.o job.o IO_manager.o schedule.o stats.o
-	$(CC) $(CFLAGS) main.o job_loader.o job_queue.o job.o schedule.o IO_manager.o stats.o -o sim -lm -g
+sim: main.o job_queue.o job_loader.o job.o IO_manager.o stats.o scheduleTimeSlice.o
+	$(CC) $(CFLAGS) main.o job_loader.o job_queue.o job.o IO_manager.o stats.o scheduleTimeSlice.o -o sim -lm -g
+
+scheduleTimeSlice.o: scheduleTimeSlice.c 
+	$(CC) $(CFLAGS) -c scheduleTimeSlice.c
 
 schedule.o: schedule.c 
 	$(CC) $(CFLAGS) -c schedule.c

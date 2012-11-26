@@ -3,7 +3,7 @@
 #include <limits.h>
 #include "job_loader.h"
 #include "IO_manager.h"
-#include "schedule.h"
+#include "scheduleTimeSlice.h"
 #include "stats.h"
 
 int main()
@@ -15,6 +15,7 @@ int main()
     int time_Arrival = INT_MAX;
     int noMoreJobs = 0;
     int min;
+    int debug_count = 5;
     /*Job that arrives*/
     JobP temp_job;
     /*Initialize Job Loader*/
@@ -28,7 +29,7 @@ int main()
 
     /*Enter the main loop*/
     printf("Start Simulation **\n\n");
-    while(running==1)
+    while(running==1 && debug_count>0)
     {
         printf("*************************************\n");
         /*Compute the time the next event will happen*/
@@ -68,7 +69,7 @@ int main()
                 needs_IO(clock,temp_job);
             }
             /*Otherwise the job is finished*/
-            if(temp_job != NULL)
+            if(temp_job != NULL && temp_job->IOOperations==0)
 	    {
                 printf("%s finished\n",temp_job->cmd_name);
                 stats_Job(temp_job,clock);
@@ -87,7 +88,7 @@ int main()
                 needs_CPU(clock,temp_job);
             }
             /*Otherwise the job is finished*/
-            if(temp_job != NULL)
+            if(temp_job != NULL && temp_job->time_remaining==0)
             {
                 printf("%s finished\n",temp_job->cmd_name);
                 stats_Job(temp_job,clock);
@@ -116,6 +117,7 @@ int main()
         printf("*************************************\n");
         /*Increment the clock*/
         clock++;
+        /*debug_count--;*/
     }
     /*print statistics*/
     print_stats();
