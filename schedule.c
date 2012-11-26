@@ -33,10 +33,8 @@ int next_CPU(int current_time){
     }
     else
     {
-        printf("%i\n",start_time);
-        return 10;
-        /*Since we are only doing FIFO otherwise below
-        return start_time + current_job->IO_interval + CONTEXT_SWITCH - current_time;*/
+        /*Since we are only doing FIFO otherwise below*/
+        return start_time + current_job->IO_interval + CONTEXT_SWITCH - current_time;
         /*
             int min = current_job->timeTillNextIO<timeSlice ? current_job->timeTillNextIO : timeSlice
         */

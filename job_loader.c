@@ -21,17 +21,20 @@ JobP next_job(int current_time)
     if(waiting_job == NULL)
     {
         /*Get the next line from the file*/
-        fgets(next_line,buffer_size, stdin);
-        /*Chop it up by the spaces*/
-        command_name = strtok(next_line," ");
-        arrival_time = atoi(strtok(NULL," "));
-        cpu_time = atof(strtok(NULL," "));
-        IO_count = atoi(strtok(NULL," "));
-        /*Create the job*/
-        waiting_job = create_job(command_name,arrival_time,cpu_time,IO_count);
+        fgets(next_line, buffer_size, stdin);
+        if(next_line!=NULL && !feof(stdin))
+        {
+            /*Chop it up by the spaces*/
+            command_name = strtok(next_line," ");
+            arrival_time = atoi(strtok(NULL," "));
+            cpu_time = atof(strtok(NULL," "));
+            IO_count = atoi(strtok(NULL," "));
+            /*Create the job*/
+            waiting_job = create_job(command_name,arrival_time,cpu_time,IO_count);
+        }
     }
     /*Check if the job is ok to send*/
-    if(waiting_job->arrival_time <= current_time)
+    if(waiting_job != NULL && waiting_job->arrival_time <= current_time)
     {
         return_val = waiting_job;
         waiting_job = NULL;
@@ -45,7 +48,6 @@ int next_JobArrival(int current_time)
     /*=Null only if didnt call next_job first or EOF*/
     if(waiting_job != NULL)
     {
-        printf("%i\n",waiting_job->arrival_time);
         return waiting_job->arrival_time-current_time;
     }
     else

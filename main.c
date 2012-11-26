@@ -43,14 +43,15 @@ int main()
         /*increment clock the smallest needed*/
         min = (time_IO < time_Arrival) ? time_IO : time_Arrival;
         clock += (time_CPU < min) ? time_CPU : min;
-        printf("IO:%i CPU:%i ARR:%i clock:%i\n",time_IO, time_CPU, time_Arrival, clock);
+        /*printf("IO:%i CPU:%i ARR:%i clock:%i\n",time_IO, time_CPU, time_Arrival, clock);*/
         if(time_CPU <= time_IO && time_CPU <= time_Arrival)
         {
             /*Handle context switch*/
-            /*temp_job = CPU_finished(clock);*/
+            temp_job = CPU_finished(clock);
             /*Add to IO if needed*/
             if(temp_job != NULL && temp_job->IOOperations>0)
 	    {
+                printf("Sent %s to IO\n",temp_job->cmd_name);
                 needs_IO(clock,temp_job);
             }
         }
