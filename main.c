@@ -15,7 +15,7 @@ int main()
     int time_Arrival = INT_MAX;
     int noMoreJobs = 0;
     int min;
-    int debug_count = 5;
+    int debug_count = 30;
     /*Job that arrives*/
     JobP temp_job;
     /*Initialize Job Loader*/
@@ -117,7 +117,7 @@ int main()
         printf("*************************************\n");
         /*Increment the clock*/
         clock++;
-        /*debug_count--;*/
+        debug_count--;
     }
     /*print statistics*/
     print_stats();
