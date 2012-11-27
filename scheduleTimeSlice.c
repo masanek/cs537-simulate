@@ -48,10 +48,11 @@ int next_CPU(int current_time){
         time_to_slice = time_slice-(current_time-start_time);
 
         /*With update time we can figure out when IO happens*/
-        if(current_time != start_time)
+        /*keep time remaining updated with time passed*/
+        time_to_IO = (current_job->time_remaining-(current_time-start_time)) % (int)current_job->IO_interval;
+        if(time_to_IO == 0 && current_time==start_time)
         {
-            /*keep time remaining updated with time passed*/
-            time_to_IO = (current_job->time_remaining-(current_time-start_time)) % (int)current_job->IO_interval;
+            time_to_IO = INT_MAX;
         }
         /*return the min*/
         return time_to_IO<time_to_slice ? time_to_IO + CONTEXT_SWITCH : time_to_slice + CONTEXT_SWITCH;
@@ -73,7 +74,8 @@ JobP CPU_finished(int current_time){
     }
   
     /* if current_job needs I/O or has 0 time left, send to main, otherwise, add to back readyqueue */ 
-    if (current_job->time_remaining > 0 && current_job->IOOperations == 0) {
+    if ((current_job->time_remaining > 0 && current_job->IOOperations == 0)
+        || current_job->time_remaining % (int)current_job->IO_interval != 0) {
         push_JobQueue(readyQueue, current_job);
         returnVal=NULL;
     }

@@ -21,22 +21,6 @@ current:A IO:2.000000 TimeLeft:100
 IO:2147483647 CPU:21 ARR:2147483647
 Current clock:22
 
-Sent A to IO
-
-*IO*
-
-current:A IO:2.000000 TimeLeft:80
-
-*Schedule*
-
-current:B IO:2.000000 TimeLeft:100
-
-*************************************
-*************************************
-IO:9 CPU:21 ARR:2147483647
-Current clock:32
-
-Sent A from IO to CPU
 
 *IO*
 
@@ -47,52 +31,62 @@ current:B IO:2.000000 TimeLeft:100
 
 *************************************
 *************************************
-IO:2147483647 CPU:11 ARR:2147483647
+IO:2147483647 CPU:21 ARR:2147483647
 Current clock:44
 
-Sent B to IO
-
-*IO*
-
-current:B IO:2.000000 TimeLeft:80
-
-*Schedule*
-
-current:A IO:1.000000 TimeLeft:80
-
-*************************************
-*************************************
-IO:9 CPU:21 ARR:2147483647
-Current clock:54
-
-Sent B from IO to CPU
 
 *IO*
 
 
 *Schedule*
 0:B,
-current:A IO:1.000000 TimeLeft:80
+current:A IO:2.000000 TimeLeft:80
+
+*************************************
+*************************************
+IO:2147483647 CPU:21 ARR:2147483647
+Current clock:66
+
+
+*IO*
+
+
+*Schedule*
+0:A,
+current:B IO:2.000000 TimeLeft:80
+
+*************************************
+*************************************
+IO:2147483647 CPU:21 ARR:2147483647
+Current clock:88
+
+
+*IO*
+
+
+*Schedule*
+0:B,
+current:A IO:2.000000 TimeLeft:60
 
 *************************************
 *************************************
 IO:2147483647 CPU:11 ARR:2147483647
-Current clock:66
+Current clock:100
 
 Sent A to IO
 
 *IO*
 
-current:A IO:1.000000 TimeLeft:60
+current:A IO:2.000000 TimeLeft:50
 
 *Schedule*
 
-current:B IO:1.000000 TimeLeft:80
+current:B IO:2.000000 TimeLeft:60
 
 *************************************
 *************************************
-IO:9 CPU:21 ARR:2147483647
-Current clock:76
+IO:9 CPU:11 ARR:2147483647
+Current clock:110
 
 Sent A from IO to CPU
 
@@ -101,67 +95,41 @@ Sent A from IO to CPU
 
 *Schedule*
 0:A,
-current:B IO:1.000000 TimeLeft:80
-
-*************************************
-*************************************
-IO:2147483647 CPU:11 ARR:2147483647
-Current clock:88
-
-Sent B to IO
-
-*IO*
-
-current:B IO:1.000000 TimeLeft:60
-
-*Schedule*
-
-current:A IO:0.000000 TimeLeft:60
-
-*************************************
-*************************************
-IO:9 CPU:21 ARR:2147483647
-Current clock:98
-
-Sent B from IO to CPU
-
-*IO*
-
-
-*Schedule*
-0:B,
-current:A IO:0.000000 TimeLeft:60
+current:B IO:2.000000 TimeLeft:60
 
 *************************************
 *************************************
 IO:2147483647 CPU:1 ARR:2147483647
-Current clock:100
+Current clock:112
 
+Sent B to IO
 
 *IO*
 
+current:B IO:2.000000 TimeLeft:50
 
 *Schedule*
-0:A,
-current:B IO:0.000000 TimeLeft:60
+
+current:A IO:1.000000 TimeLeft:50
 
 *************************************
 *************************************
-IO:2147483647 CPU:21 ARR:2147483647
+IO:9 CPU:21 ARR:2147483647
 Current clock:122
 
+Sent B from IO to CPU
 
 *IO*
 
 
 *Schedule*
 0:B,
-current:A IO:0.000000 TimeLeft:50
+current:A IO:1.000000 TimeLeft:50
 
 *************************************
 *************************************
-IO:2147483647 CPU:21 ARR:2147483647
-Current clock:144
+IO:2147483647 CPU:11 ARR:2147483647
+Current clock:134
 
 
 *IO*
@@ -169,12 +137,12 @@ Current clock:144
 
 *Schedule*
 0:A,
-current:B IO:0.000000 TimeLeft:40
+current:B IO:1.000000 TimeLeft:50
 
 *************************************
 *************************************
 IO:2147483647 CPU:21 ARR:2147483647
-Current clock:166
+Current clock:156
 
 
 *IO*
@@ -182,12 +150,12 @@ Current clock:166
 
 *Schedule*
 0:B,
-current:A IO:0.000000 TimeLeft:30
+current:A IO:1.000000 TimeLeft:30
 
 *************************************
 *************************************
 IO:2147483647 CPU:21 ARR:2147483647
-Current clock:188
+Current clock:178
 
 
 *IO*
@@ -195,28 +163,70 @@ Current clock:188
 
 *Schedule*
 0:A,
-current:B IO:0.000000 TimeLeft:20
+current:B IO:1.000000 TimeLeft:30
 
 *************************************
 *************************************
 IO:2147483647 CPU:21 ARR:2147483647
-Current clock:210
+Current clock:200
 
-B finished
 
 *IO*
 
 
 *Schedule*
-
-current:A IO:0.000000 TimeLeft:10
+0:B,
+current:A IO:1.000000 TimeLeft:10
 
 *************************************
 *************************************
-IO:2147483647 CPU:21 ARR:2147483647
-Current clock:232
+IO:2147483647 CPU:11 ARR:2147483647
+Current clock:212
+
+Sent A to IO
+
+*IO*
+
+current:A IO:1.000000 TimeLeft:0
+
+*Schedule*
+
+current:B IO:1.000000 TimeLeft:10
+
+*************************************
+*************************************
+IO:9 CPU:11 ARR:2147483647
+Current clock:222
 
 A finished
+
+*IO*
+
+
+*Schedule*
+
+current:B IO:1.000000 TimeLeft:10
+
+*************************************
+*************************************
+IO:2147483647 CPU:1 ARR:2147483647
+Current clock:224
+
+Sent B to IO
+
+*IO*
+
+current:B IO:1.000000 TimeLeft:0
+
+*Schedule*
+
+
+*************************************
+*************************************
+IO:9 CPU:2147483647 ARR:2147483647
+Current clock:234
+
+B finished
 
 *IO*
 
@@ -227,4 +237,4 @@ A finished
 *************************************
 *************************************
 **********STATISTICS************
-AVERAGE COMPLETION TIME:221.000000
+AVERAGE COMPLETION TIME:228.000000
