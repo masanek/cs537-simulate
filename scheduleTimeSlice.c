@@ -26,7 +26,7 @@ void needs_CPU(int current_time, JobP toAdd)
     if(start_time == -1)/*Nothing is there*/
     {
         current_job = toAdd;
-        /*It cana start only after 1ms of being switched in*/
+        /*It can start only after 1ms of being switched in*/
         start_time = current_time+CONTEXT_SWITCH;
     }
     else
@@ -63,23 +63,8 @@ JobP CPU_finished(int current_time){
     JobP returnVal = current_job;
     /*update how much CPU is left*/
     /*So this is tricky. need to see if we are hitting IO or ending time slice*/
-    if( (current_time-CONTEXT_SWITCH)-start_time != time_slice)/*Not time slice must be IO*/
-    {
-        /*subtract off remaining time to IO*/
-        printf("HIT");
-        if(0==current_job->time_remaining % (int)current_job->IO_interval)/*This can happen if never got updated above*/
-	{
-            current_job->time_remaining -= (int)current_job->IO_interval;
-	}
-	else
-	{
-	    current_job->time_remaining -= current_job->time_remaining % (int)current_job->IO_interval;
-	}
-    }
-    else /*Must have hit timeslice end-May still need io*/
-    {
-        current_job->time_remaining -= time_slice;
-    }
+    int time_ran_for = current_time-start_time-CONTEXT_SWITCH;
+    current_job->time_remaining -= time_ran_for;
   
     /* if current_job needs I/O or has 0 time left, send to main, otherwise, add to back readyqueue */ 
     if ((current_job->time_remaining > 0 && current_job->IOOperations == 0)

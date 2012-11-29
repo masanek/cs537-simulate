@@ -117,7 +117,7 @@ int main()
         printf("*************************************\n");
         /*Increment the clock*/
         clock++;
-        debug_count--;
+        /*debug_count--;*/
     }
     /*print statistics*/
     print_stats();
