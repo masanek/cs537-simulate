@@ -13,7 +13,7 @@ JobQueueP create_JobQueue()
     return temp_queue;
 }
 
-void destory_JobQueue(JobQueueP queue)
+void destroy_JobQueue(JobQueueP queue)
 {
     JobNodeP temp_head;
     while(queue->size != 0)

@@ -1,10 +1,10 @@
 # Makefile for executable proj2
 CC = gcc
-CFLAGS = -pedantic -Wall
+CFLAGS = -pedantic -Wall -g
 
 # ****************************************************
 sim: main.o job_queue.o job_loader.o job.o IO_manager.o stats.o scheduleTimeSlice.o
-	$(CC) $(CFLAGS) main.o job_loader.o job_queue.o job.o IO_manager.o stats.o scheduleTimeSlice.o -o sim -lm -g
+	$(CC) $(CFLAGS) main.o job_loader.o job_queue.o job.o IO_manager.o stats.o scheduleTimeSlice.o -o sim -lm 
 
 scheduleTimeSlice.o: scheduleTimeSlice.c 
 	$(CC) $(CFLAGS) -c scheduleTimeSlice.c
@@ -31,4 +31,4 @@ main.o: main.c
 	$(CC) $(CFLAGS) -c main.c
 
 clean:
-	rm main.o job_loader.o job_queue.o job.o IO_manager.o schedule.o stats.o
+	rm main.o job_loader.o job_queue.o job.o IO_manager.o scheduleTimeSlice.o stats.o

@@ -11,7 +11,7 @@ typedef struct cs537_Job /*Tag for the struct*/
     double IO_count;
     double IOOperations;
     double IO_interval;
-    int timeTillNextIO;
+    int needs_IO;
 }Job,*JobP;/*Actual struct name*/
 #endif
 

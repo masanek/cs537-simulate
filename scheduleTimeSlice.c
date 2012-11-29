@@ -26,8 +26,9 @@ void needs_CPU(int current_time, JobP toAdd)
     if(start_time == -1)/*Nothing is there*/
     {
         current_job = toAdd;
-        /*It cana start only after 1ms of being switched in*/
-        start_time = current_time+CONTEXT_SWITCH;
+        /*It can start only after 1ms of being switched in*/
+        /* clock will already be incremented in main */
+        start_time = current_time;
     }
     else
     {
@@ -38,6 +39,7 @@ void needs_CPU(int current_time, JobP toAdd)
 int next_CPU(int current_time){
     int time_to_IO = INT_MAX;
     int time_to_slice = INT_MAX;
+    int time_to_finish = INT_MAX;
     if(start_time == -1)
     {
         return INT_MAX;
@@ -45,54 +47,45 @@ int next_CPU(int current_time){
     else
     {
         /*Compute the time to the next slice*/
-        time_to_slice = time_slice-(current_time-start_time);
+        time_to_slice = time_slice - (current_time - start_time);
 
-        /*With update time we can figure out when IO happens*/
         /*keep time remaining updated with time passed*/
-        time_to_IO = (current_job->time_remaining-(current_time-start_time)) % (int)current_job->IO_interval;
-        if(time_to_IO == 0 && current_time==start_time)
-        {
-            time_to_IO = (int)current_job->IO_interval;
+        time_to_IO = current_job->IO_interval - (current_time - start_time); 
+        
+        /* will process terminate */
+        time_to_finish = current_job->time_remaining - (current_time - start_time);
+        printf("current_time:%i start_time:%i\n", current_time, start_time);
+        printf("time_to_slice:%i time_to_IO:%i time_to_finish:%i\n", time_to_slice, time_to_IO, time_to_finish);
+        /* if time_to_IO is min return it and set needs_IO to 1 */
+        if(time_to_IO <= time_to_slice && time_to_IO <= time_to_finish && current_job->IOOperations > 0){
+            current_job->needs_IO = 1;
+            return time_to_IO;
         }
-        /*return the min*/
-        return time_to_IO<time_to_slice ? time_to_IO + CONTEXT_SWITCH : time_to_slice + CONTEXT_SWITCH;
+
+        /* otherwise return whichever happens first, process termination or timeslice ending*/
+        return (time_to_finish < time_to_slice) ? time_to_finish : time_to_slice;
     }
 }
 
 JobP CPU_finished(int current_time){
     JobP returnVal = current_job;
     /*update how much CPU is left*/
-    /*So this is tricky. need to see if we are hitting IO or ending time slice*/
-    if( (current_time-CONTEXT_SWITCH)-start_time != time_slice)/*Not time slice must be IO*/
-    {
-        /*subtract off remaining time to IO*/
-        printf("HIT");
-        if(0==current_job->time_remaining % (int)current_job->IO_interval)/*This can happen if never got updated above*/
-	{
-            current_job->time_remaining -= (int)current_job->IO_interval;
-	}
-	else
-	{
-	    current_job->time_remaining -= current_job->time_remaining % (int)current_job->IO_interval;
-	}
-    }
-    else /*Must have hit timeslice end-May still need io*/
-    {
-        current_job->time_remaining -= time_slice;
-    }
+    current_job->time_remaining -= (current_time - start_time - 1);
   
     /* if current_job needs I/O or has 0 time left, send to main, otherwise, add to back readyqueue */ 
-    if ((current_job->time_remaining > 0 && current_job->IOOperations == 0)
-        || current_job->time_remaining % (int)current_job->IO_interval != 0) {
+    if (current_job->needs_IO == 0 && current_job->time_remaining > 0){
         push_JobQueue(readyQueue, current_job);
-        returnVal=NULL;
+        returnVal = NULL;
     }
+
+    
     /*Set up the next guy*/
     start_time = -1;
     current_job = pop_JobQueue(readyQueue);
     if(current_job != NULL)
     {
-        start_time = current_time+CONTEXT_SWITCH;
+        start_time = current_time + 1;
+        current_job->needs_IO = 0;
     }
     /*Only one job is here*/
     if(current_job == returnVal)
@@ -100,6 +93,10 @@ JobP CPU_finished(int current_time){
         returnVal=NULL;
     }
     return returnVal;
+}
+
+JobP getCurrentJob(){
+    return current_job;
 }
 
 void print_schedule_manager()
