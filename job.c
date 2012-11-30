@@ -23,10 +23,13 @@ JobP create_job(char * name, int start, double CPU_time, int IO_count)
     /*Number of IO ops needed*/
     temp_job->IOOperations = trunc ((IO_count + 8191) / 8192);
     /*Interval of IO rounded up-We should get rid of this and use tim's mod algo(?)*/
-    temp_job->IO_interval = trunc(temp_job->CPU_time/temp_job->IOOperations)<1 ? 1 : trunc(temp_job->CPU_time/temp_job->IOOperations);
+    if( temp_job->IOOperations > 1)
+    temp_job->IO_interval = trunc(temp_job->CPU_time/temp_job->IOOperations)<1 ? 1 : (int)trunc(temp_job->CPU_time/temp_job->IOOperations);
+    else
+    temp_job->IO_interval = 0;
     /*keep track of when it needs IO for returning from CPU_finished*/
     temp_job->needs_IO = 0;
     /*Print what was loaded*/
-    printf("READ IN JOB:%s,Arrival: %i, IOOperations: %f, interval:%f\n",temp_job->cmd_name,start, temp_job->IOOperations, temp_job->IO_interval);
+   // printf("READ IN JOB:%s,Arrival: %i, IOOperations: %f, interval:%i\n",temp_job->cmd_name,start, temp_job->IOOperations, temp_job->IO_interval);
     return temp_job;
 }
