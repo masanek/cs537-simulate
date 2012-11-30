@@ -16,7 +16,6 @@ int main()
     int noMoreJobs = 0;
     int min;
     int debug_count = 30;
-    int contextIn = 0;
     /*Job that arrives*/
     JobP temp_job;
     /*Initialize Job Loader*/
@@ -32,8 +31,7 @@ int main()
     printf("Start Simulation **\n\n");
     while(running==1 && debug_count>0)
     {
-        contextIn = 0;
-        printf("*************************************\n");
+        /*printf("*************************************\n");
         /*Compute the time the next event will happen*/
         time_CPU = next_CPU(clock);
         time_IO = next_CompletedIO(clock);
@@ -47,44 +45,38 @@ int main()
             noMoreJobs = 1;
             time_Arrival = INT_MAX;
         }
-        /*increment to the next nearest event. It could be three things*/
-        min = (time_IO < time_Arrival) ? time_IO : time_Arrival;
-        clock += (time_CPU < min) ? time_CPU : min;
-        /*Everything is done so quit*/
         if(time_IO == INT_MAX && time_CPU == INT_MAX && time_Arrival == INT_MAX)
         {
              /* TODO print final stats */
              break;
         }
+        /*increment to the next nearest event. It could be three things*/
+        min = (time_IO < time_Arrival) ? time_IO : time_Arrival;
+        clock += (time_CPU < min) ? time_CPU : min;
+        /*Everything is done so quit*/
         /*Print out some stats on what is next*/
-        printf("IO:%i CPU:%i ARR:%i\n",time_IO, time_CPU, time_Arrival);
-        temp_job = getCurrentJob();
-        if (temp_job != NULL) if (temp_job->needs_IO == 1) printf("CPU is I/O\n");
-        printf("Current clock:%lu\n\n",clock);
+        /*printf("IO:%i CPU:%i ARR:%i\n",time_IO, time_CPU, time_Arrival);
+        printf("Current clock:%lu\n\n",clock);*/
 
 
         /* timeslice ends, either needs to do I/O, used all of timeslice, or process terminated */
         if(time_CPU <= time_IO && time_CPU <= time_Arrival)
         {
-            /* context switch out */
-            clock++;
-            printf("Context switch out\n");
             /*This will handle the context switch*/
             temp_job = CPU_finished(clock);/*Return NULL if internal switch, returns job if needs help*/
             
             /*Add to IO*/
             if(temp_job != NULL && temp_job->IOOperations>0)
 	        {
-                printf("Sent %s to IO at %i\n",temp_job->cmd_name, clock);
+                //printf("Sent %s to IO at %lu\n",temp_job->cmd_name, clock);
                 needs_IO(clock,temp_job);
             }
             /*Otherwise the job is finished*/
             if(temp_job != NULL && temp_job->IOOperations==0)
 	        {
-                printf("%s finished\n",temp_job->cmd_name);
+                //printf("%s finished\n",temp_job->cmd_name);
                 stats_Job(temp_job,clock);
             }
-            if (getCurrentJob() != NULL) contextIn = 1;
         }
         temp_job = NULL;
 
@@ -96,13 +88,13 @@ int main()
             /*Send back to CPU*/
             if(temp_job != NULL && temp_job->time_remaining>0)
 	        {   
-                printf("Sent %s from IO to CPU\n",temp_job->cmd_name);
+                //printf("Sent %s from IO to CPU\n",temp_job->cmd_name);
                 needs_CPU(clock,temp_job);
             }
             /*Otherwise the job is finished*/
             if(temp_job != NULL && temp_job->time_remaining==0)
             {
-                printf("%s finished\n",temp_job->cmd_name);
+                //printf("%s finished\n",temp_job->cmd_name);
                 stats_Job(temp_job,clock);
             }
         }
@@ -112,20 +104,19 @@ int main()
         if(time_Arrival <= time_IO && time_Arrival <= time_CPU)
         {
             do{
-                printf("CLOCK IS:%i\n", clock);
                 temp_job = next_job(clock);/*Returns NULL if EOF or next job hasnt arrived*/
                 if(temp_job!=NULL)
                 {
-                    printf("Sent %s to CPU\n",temp_job->cmd_name);
+                    //printf("Sent %s to CPU\n",temp_job->cmd_name);
                     needs_CPU(clock, temp_job);
                 }
             }while(temp_job != NULL);
         }
 
         temp_job = NULL;
-        /*Print current queues*/
-        //printf("\n");
-        //print_IO_manager();
+        /*Print current queues
+        printf("\n");
+        print_IO_manager();
         printf("\n");
         print_schedule_manager();
         printf("\n");
@@ -135,7 +126,7 @@ int main()
         /*debug_count--;*/
     }
     /*print statistics*/
-    print_stats();
+    print_stats(clock);
     return 0;
 }
 

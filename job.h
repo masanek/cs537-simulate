@@ -10,7 +10,7 @@ typedef struct cs537_Job /*Tag for the struct*/
     double time_running;
     double IO_count;
     double IOOperations;
-    double IO_interval;
+    int IO_interval;
     int needs_IO;
 }Job,*JobP;/*Actual struct name*/
 #endif
